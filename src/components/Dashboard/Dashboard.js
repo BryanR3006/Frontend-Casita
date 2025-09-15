@@ -4,7 +4,7 @@ import "./DashboardEmbed.css";
 const DashboardEmbed = () => {
   return (
     <div className="dashboard-wrapper">
-      <h2 className="dashboard-title">Panel de Control - Power BI + Mega Avanzado</h2>
+      <h2 className="dashboard-title">📊 Panel de Control - Power BI</h2>
       <div className="dashboard-frame">
         <iframe
           title="Dashboard Power BI"
