@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Table, Button, Container, Row, Col, Form, Alert, Spinner } from "react-bootstrap";
-import { customers } from "../../Services/api";
+import clienteService from '../../Services/api';
+
 
 const ListarCliente = () => {
     const [clientes, setClientes] = useState([]);
@@ -17,7 +18,7 @@ const cargarClientes = async () => {
     try {
         setLoading(true);
         console.log("Llamando API...");
-        const data = await customers.getClientes();
+        const data = await clienteService.getClientes();
             console.log("Datos recibidos:", data);
         setClientes(data);
 
@@ -110,18 +111,14 @@ const cargarClientes = async () => {
                             <td>
                                 <Button
                                 as={Link}
-                                to={`/clientes/editar/${cliente.Id}`}
+                                to={`/clientes/editar/${cliente.id}`}
                                 variant="warning"
                                 size="sm"
                                 className="me-2"
                                 >
                                 Editar
                                 </Button>
-                                <Button
-                                variant="danger"
-                                size="sm"
-                                onClick={() => eliminarCliente(cliente.Id)}
-                                >
+                                <Button variant="danger"  size="sm" onClick={() => eliminarCliente(cliente.id)} >
                                 Eliminar
                                 </Button>
                             </td>
