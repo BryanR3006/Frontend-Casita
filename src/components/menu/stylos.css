@@ -1,0 +1,39 @@
+
+.sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+}
+
+
+.nav-link,
+.dropdown-toggle {
+  color: #252525 !important;
+}
+
+.nav-link:hover,
+.dropdown-toggle:hover {
+  color: #0099ff !important; /* Bootstrap warning color */
+}
+
+.dropdown-menu {
+  background-color: #747474;
+  border: none;
+  border-radius: 30px soli;
+  width: 150px;
+
+}
+
+.dropdown-item {
+  color: #ffffff;
+}
+
+.dropdown-item:hover {
+  background-color: #495057;
+
+  width: 150px;
+  color: #c5ffec;
+}

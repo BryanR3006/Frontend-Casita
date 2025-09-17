@@ -36,8 +36,8 @@ const cargarClientes = async () => {
         e.preventDefault();
         try {
             setLoading(true);
-            // const data = await clienteService.buscarClientes(filtro);
-            // setClientes(data);
+            const data = await clienteService.buscarClientes(filtro);
+            setClientes(data);
             setError(null);
         } catch (error) {
             setError("Error al buscar los clientes");
@@ -59,6 +59,22 @@ const cargarClientes = async () => {
             }
         }
     };
+    const FechaNacimiento = (FechaNacimiento) => {
+        const hoy = new Date(); // ← corregido: "Date" con D mayúscula
+        const fechaPersona = new Date(FechaNacimiento);
+
+        let edadCompleta = hoy.getFullYear() - fechaPersona.getFullYear();
+        const mes = hoy.getMonth() - fechaPersona.getMonth();
+        const dia = hoy.getDate() - fechaPersona.getDate();
+
+        // Ajuste si aún no ha cumplido años este año
+        if (mes < 0 || (mes === 0 && dia < 0)) {
+            edadCompleta--;
+        }
+
+        return edadCompleta;
+    };
+
 
     if (loading) return <Spinner animation="border" variant="primary" />;
     if (error) return <Alert variant="danger">{error}</Alert>;
@@ -98,34 +114,47 @@ const cargarClientes = async () => {
                         <th>Correo</th>
                         <th>Teléfono</th>
                         <th>Dirección</th>
+                        <th>Fecha Nacimiento</th>
                         <th>Acciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    {clientes.map((cliente) => (
-                        <tr key={cliente.id}>
-                            <td>{cliente.firstName} {cliente.lastName}</td>
-                            <td>{cliente.email}</td>
-                            <td>{cliente.phone}</td>
-                            <td>{cliente.city} {cliente.country}</td>
-                            <td>
-                                <Button
-                                as={Link}
-                                to={`/clientes/editar/${cliente.id}`}
-                                variant="warning"
-                                size="sm"
-                                className="me-2"
-                                >
-                                Editar
-                                </Button>
-                                <Button variant="danger"  size="sm" onClick={() => eliminarCliente(cliente.id)} >
-                                Eliminar
-                                </Button>
-                            </td>
-                        </tr>
+                        {clientes.map((cliente) => {
+                            const edad = FechaNacimiento(cliente.FechaNacimiento);
 
-                    ))}
-                </tbody>
+                            return (
+                            <tr key={cliente.id}>
+                                <td>{cliente.firstName} {cliente.lastName}</td>
+                                <td>{cliente.email}</td>
+                                <td>{cliente.phone}</td>
+                                <td>{cliente.city} {cliente.country}</td>
+                                <td>
+                                {cliente.FechaNacimiento} ({edad} años)
+                                </td>
+                                <td>
+                                <Button
+                                    as={Link}
+                                    to={`/clientes/editar/${cliente.id}`}
+                                    variant="warning"
+                                    size="sm"
+                                    className="me-2"
+                                >
+                                    Editar
+                                </Button>
+                                <Button
+                                    variant="danger"
+                                    size="sm"
+                                    onClick={() => eliminarCliente(cliente.id)}
+                                >
+                                    Eliminar
+                                </Button>
+                                </td>
+                            </tr>
+                            );
+                        })}
+                        </tbody>
+
             </Table>
         </Container>
     );
