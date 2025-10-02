@@ -1,39 +1,121 @@
-
 .sidebar {
-  width: 250px;
+  width: 280px;
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
   z-index: 1000;
+  background-color: #f8f9fa !important;
+  overflow-y: auto;
 }
 
+.sidebar-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
 
-.nav-link,
+.sidebar-header h4 {
+  color: white !important;
+  font-weight: bold;
+}
+
+.nav-link {
+  color: #495057 !important;
+  padding: 12px 15px !important;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background-color: #e9ecef;
+  color: #007bff !important;
+  transform: translateX(5px);
+}
+
+.active-nav {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.active-nav .nav-link {
+  color: white !important;
+}
+
+/* Dropdown Styles */
 .dropdown-toggle {
-  color: #252525 !important;
+  color: #495057 !important;
+  background: none !important;
+  border: none !important;
+  text-align: left;
+  padding: 12px 15px !important;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
-.nav-link:hover,
 .dropdown-toggle:hover {
-  color: #0099ff !important; /* Bootstrap warning color */
+  background-color: #e9ecef !important;
+  color: #007bff !important;
+  transform: translateX(5px);
 }
 
 .dropdown-menu {
-  background-color: #747474;
-  border: none;
-  border-radius: 30px soli;
-  width: 150px;
-
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 200px;
+  margin-left: 10px;
 }
 
 .dropdown-item {
-  color: #ffffff;
+  color: #495057;
+  padding: 10px 15px;
+  transition: all 0.2s ease;
+  font-weight: 500;
 }
 
 .dropdown-item:hover {
-  background-color: #495057;
+  background-color: #007bff;
+  color: white !important;
+}
 
-  width: 150px;
-  color: #c5ffec;
+.active-dropdown {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+/* User dropdown específico */
+.user-dropdown .dropdown-toggle {
+  background-color: #e3f2fd !important;
+  color: #1976d2 !important;
+}
+
+.user-dropdown .dropdown-toggle:hover {
+  background-color: #bbdefb !important;
+}
+
+/* Icon styles */
+.nav-link svg, .dropdown-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Scrollbar personalizado para sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }

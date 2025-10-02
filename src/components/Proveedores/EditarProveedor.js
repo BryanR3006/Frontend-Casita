@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
-import { clienteService } from "../../Services/api";
+import { proveedorService } from "../../Services/api";
 
-const EditarCliente = () => {
+const EditarProveedor = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
@@ -11,40 +11,42 @@ const EditarCliente = () => {
     const [error, setError] = useState(null);
     
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
+        companyName: '',
+        contactName: '',
+        contactTitle: '',
         city: '',
         country: '',
-        dateOfBirth: ''
+        phone: '',
+        fax: '',
+        email: ''
     });
 
     useEffect(() => {
-        const cargarCliente = async () => {
+        const cargarProveedor = async () => {
             try {
                 setLoadingData(true);
-                const response = await clienteService.getById(id);
-                const cliente = response.data;
+                const response = await proveedorService.getById(id);
+                const proveedor = response.data;
                 
                 setFormData({
-                    firstName: cliente.firstName || '',
-                    lastName: cliente.lastName || '',
-                    email: cliente.email || '',
-                    phone: cliente.phone || '',
-                    city: cliente.city || '',
-                    country: cliente.country || '',
-                    dateOfBirth: cliente.dateOfBirth ? cliente.dateOfBirth.split('T')[0] : ''
+                    companyName: proveedor.companyName || '',
+                    contactName: proveedor.contactName || '',
+                    contactTitle: proveedor.contactTitle || '',
+                    city: proveedor.city || '',
+                    country: proveedor.country || '',
+                    phone: proveedor.phone || '',
+                    fax: proveedor.fax || '',
+                    email: proveedor.email || ''
                 });
             } catch (error) {
-                console.error("Error al cargar cliente:", error);
-                setError("Error al cargar los datos del cliente");
+                console.error("Error al cargar proveedor:", error);
+                setError("Error al cargar los datos del proveedor");
             } finally {
                 setLoadingData(false);
             }
         };
 
-        cargarCliente();
+        cargarProveedor();
     }, [id]);
 
     const handleChange = (e) => {
@@ -63,14 +65,14 @@ const EditarCliente = () => {
             // ✅ CORRECCIÓN: Incluir el id en el payload
             const payload = {
                 ...formData,
-                id: parseInt(id) // Asegurar que el id sea número
+                id: parseInt(id) // ← ESTA ES LA LÍNEA CLAVE QUE FALTABA
             };
             
             console.log('📤 Enviando datos:', JSON.stringify(payload, null, 2));
             
-            await clienteService.update(id, payload);
-            alert("Cliente actualizado exitosamente!");
-            navigate("/clientes/lista");
+            await proveedorService.update(id, payload);
+            alert("Proveedor actualizado exitosamente!");
+            navigate("/proveedores/lista");
         } catch (error) {
             console.error("❌ Error completo:", error);
             console.error("📊 Response data:", error.response?.data);
@@ -82,13 +84,14 @@ const EditarCliente = () => {
                     let errorMessage = "Errores de validación:\n\n";
                     
                     const fieldNames = {
-                        'firstName': 'Nombre',
-                        'lastName': 'Apellido',
-                        'email': 'Email', 
+                        'companyName': 'Nombre de la Empresa',
+                        'contactName': 'Nombre de Contacto',
+                        'contactTitle': 'Cargo del Contacto', 
                         'phone': 'Teléfono',
-                        'dateOfBirth': 'Fecha de Nacimiento',
+                        'email': 'Email',
                         'city': 'Ciudad',
-                        'country': 'País'
+                        'country': 'País',
+                        'fax': 'Fax'
                     };
                     
                     for (const [field, messages] of Object.entries(errors)) {
@@ -112,20 +115,20 @@ const EditarCliente = () => {
                 setError("Error de conexión con el servidor");
             }
             else {
-                setError(error.message || "Error desconocido al actualizar el cliente");
+                setError(error.message || "Error desconocido al actualizar el proveedor");
             }
         } finally {
             setLoading(false);
         }
     };
 
-    if (loadingData) return <div>Cargando datos del cliente...</div>;
+    if (loadingData) return <div>Cargando datos del proveedor...</div>;
 
     return (
         <Container className="container-sm">
             <Row className="mb-4">
                 <Col>
-                    <h1>Editar Cliente</h1>
+                    <h1>Editar Proveedor</h1>
                 </Col>
             </Row>
 
@@ -140,58 +143,44 @@ const EditarCliente = () => {
             <Row>
                 <Col md={8}>
                     <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Nombre de la Empresa *</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="companyName"
+                                value={formData.companyName}
+                                onChange={handleChange}
+                                required
+                                isInvalid={error && error.includes('Nombre de la Empresa')}
+                            />
+                        </Form.Group>
+
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Nombre *</Form.Label>
+                                    <Form.Label>Nombre de Contacto</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        name="firstName"
-                                        value={formData.firstName}
+                                        name="contactName"
+                                        value={formData.contactName}
                                         onChange={handleChange}
-                                        required
-                                        isInvalid={error && error.includes('Nombre')}
+                                        isInvalid={error && error.includes('Nombre de Contacto')}
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Apellido *</Form.Label>
+                                    <Form.Label>Cargo del Contacto</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        name="lastName"
-                                        value={formData.lastName}
+                                        name="contactTitle"
+                                        value={formData.contactTitle}
                                         onChange={handleChange}
-                                        required
-                                        isInvalid={error && error.includes('Apellido')}
+                                        isInvalid={error && error.includes('Cargo del Contacto')}
                                     />
                                 </Form.Group>
                             </Col>
                         </Row>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email *</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                                isInvalid={error && error.includes('Email')}
-                            />
-                        </Form.Group>
-
-                        <Form.Group className="mb-3">
-                            <Form.Label>Teléfono *</Form.Label>
-                            <Form.Control
-                                type="text"
-                                        name="phone"
-                                        value={formData.phone}
-                                        onChange={handleChange}
-                                        required
-                                        isInvalid={error && error.includes('Teléfono')}
-                                    />
-                                </Form.Group>
 
                         <Row>
                             <Col md={6}>
@@ -221,23 +210,45 @@ const EditarCliente = () => {
                         </Row>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Fecha de Nacimiento *</Form.Label>
+                            <Form.Label>Teléfono *</Form.Label>
                             <Form.Control
-                                type="date"
-                                name="dateOfBirth"
-                                value={formData.dateOfBirth}
+                                type="text"
+                                name="phone"
+                                value={formData.phone}
                                 onChange={handleChange}
                                 required
-                                max={new Date().toISOString().split('T')[0]}
-                                isInvalid={error && error.includes('Fecha de Nacimiento')}
+                                isInvalid={error && error.includes('Teléfono')}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Fax</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="fax"
+                                value={formData.fax}
+                                onChange={handleChange}
+                                isInvalid={error && error.includes('Fax')}
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email *</Form.Label>
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                isInvalid={error && error.includes('Email')}
                             />
                         </Form.Group>
 
                         <div className="d-grid gap-2 d-md-flex">
                             <Button variant="primary" type="submit" disabled={loading}>
-                                {loading ? "Actualizando..." : "Actualizar Cliente"}
+                                {loading ? "Actualizando..." : "Actualizar Proveedor"}
                             </Button>
-                            <Button variant="secondary" onClick={() => navigate("/clientes/lista")}>
+                            <Button variant="secondary" onClick={() => navigate("/proveedores/lista")}>
                                 Cancelar
                             </Button>
                         </div>
@@ -248,4 +259,4 @@ const EditarCliente = () => {
     );
 };
 
-export default EditarCliente;
+export default EditarProveedor;

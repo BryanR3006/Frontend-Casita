@@ -1,49 +1,151 @@
 import React from 'react';
 import { Nav, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import '../menu/stylos.css';
-
-import { FaTachometerAlt, FaUsers, FaShoppingCart, FaFileInvoiceDollar, FaBoxOpen, FaTruck, FaUserCircle } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+import './stylos.css';
+import { FaUsers, FaShoppingCart, FaBoxOpen, FaTruck, FaChartBar, FaUserCircle, FaHome } from 'react-icons/fa';
 
 const Sidebar = () => {
+  const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user')) || { nombre: 'Admin User' };
 
+  // Función para verificar si la ruta está activa
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <div className="sidebar bg-body-tertiar">
-      <div className="sidebar-header p-3 border-bottom">
-        <h4 className="m-0">BizManager</h4>
+    <div className="sidebar bg-light border-end">
+      <div className="sidebar-header p-3 border-bottom bg-white">
+        <h4 className="m-0 text-dark">BizManager</h4>
       </div>
 
       <Nav className="flex-column p-3">
-        <NavDropdown title={<><FaTachometerAlt className="me-2" />Dashboard</>} className="">
-          <NavDropdown.Item as={Link} to="/dashboard">dashboard</NavDropdown.Item>
-        </NavDropdown>
-        <NavDropdown title={<><FaUsers className="me-2 " />Clientes</>} id="clientes-dropdown" className="text-white">
-          <NavDropdown.Item as={Link} to="/clientes/lista  " >Lista de clientes</NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/clientes/agregar">Agregar Cliente</NavDropdown.Item>
+        {/* Inicio - Home.js */}
+        <Nav.Link 
+          as={Link} 
+          to="/" 
+          className={`mb-2 ${isActive('/') ? 'active-nav' : ''}`}
+        >
+          <FaHome className="me-2" />
+          Inicio
+        </Nav.Link>
+
+        {/* CLIENTES Dropdown */}
+        <NavDropdown 
+          title={<><FaUsers className="me-2" />Clientes</>} 
+          id="clientes-dropdown"
+          className={`mb-2 ${location.pathname.includes('/clientes') ? 'active-nav' : ''}`}
+        >
+          <NavDropdown.Item 
+            as={Link} 
+            to="/clientes/lista"
+            className={isActive('/clientes/lista') ? 'active-dropdown' : ''}
+          >
+            Lista Clientes
+          </NavDropdown.Item>
+          <NavDropdown.Item 
+            as={Link} 
+            to="/clientes/agregar"
+            className={isActive('/clientes/agregar') ? 'active-dropdown' : ''}
+          >
+            Agregar Cliente
+          </NavDropdown.Item>
         </NavDropdown>
 
-        <NavDropdown title={<><FaShoppingCart className="me-2" />Pedidos</>} id="pedidos-dropdown" className="text-white">
-          <NavDropdown.Item as={Link} to="/pedidos/nuevo">Nuevo Pedido</NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/pedidos/lista">Lista de Pedidos</NavDropdown.Item>
+        {/* ORDENES Dropdown */}
+        <NavDropdown 
+          title={<><FaShoppingCart className="me-2" />Ordenes</>} 
+          id="ordenes-dropdown"
+          className={`mb-2 ${location.pathname.includes('/ordenes') ? 'active-nav' : ''}`}
+        >
+          <NavDropdown.Item 
+            as={Link} 
+            to="/ordenes/lista"
+            className={isActive('/ordenes/lista') ? 'active-dropdown' : ''}
+          >
+            Lista de Ordenes
+          </NavDropdown.Item>
+          <NavDropdown.Item 
+            as={Link} 
+            to="/ordenes/agregar"
+            className={isActive('/ordenes/agregar') ? 'active-dropdown' : ''}
+          >
+            Nueva Orden
+          </NavDropdown.Item>
         </NavDropdown>
 
-        <NavDropdown title={<><FaFileInvoiceDollar className="me-2" />Facturación</>} id="facturacion-dropdown" className="">
-          <NavDropdown.Item as={Link} to="/facturacion/nuevo">Nueva factura</NavDropdown.Item>
-          <NavDropdown.Item as={Link} to="/facturacion/lista">Lista de facturas</NavDropdown.Item>
+        {/* PRODUCTOS Dropdown */}
+        <NavDropdown 
+          title={<><FaBoxOpen className="me-2" />Productos</>} 
+          id="productos-dropdown"
+          className={`mb-2 ${location.pathname.includes('/productos') ? 'active-nav' : ''}`}
+        >
+          <NavDropdown.Item 
+            as={Link} 
+            to="/productos/lista"
+            className={isActive('/productos/lista') ? 'active-dropdown' : ''}
+          >
+            Lista Productos
+          </NavDropdown.Item>
+          <NavDropdown.Item 
+            as={Link} 
+            to="/productos/agregar"
+            className={isActive('/productos/agregar') ? 'active-dropdown' : ''}
+          >
+            Agregar Productos
+          </NavDropdown.Item>
         </NavDropdown>
 
-        <NavDropdown title={<><FaBoxOpen className="me-2" />Productos</>} id="productos-dropdown" className="text-white">
-          <NavDropdown.Item as={Link} to="/productos/lista">Inventario</NavDropdown.Item>
+        {/* PROVEEDORES Dropdown */}
+        <NavDropdown 
+          title={<><FaTruck className="me-2" />Proveedores</>} 
+          id="proveedores-dropdown"
+          className={`mb-2 ${location.pathname.includes('/proveedores') ? 'active-nav' : ''}`}
+        >
+          <NavDropdown.Item 
+            as={Link} 
+            to="/proveedores/lista"
+            className={isActive('/proveedores/lista') ? 'active-dropdown' : ''}
+          >
+            Lista Proveedores
+          </NavDropdown.Item>
+          <NavDropdown.Item 
+            as={Link} 
+            to="/proveedores/agregar"
+            className={isActive('/proveedores/agregar') ? 'active-dropdown' : ''}
+          >
+            Agregar Proveedor
+          </NavDropdown.Item>
         </NavDropdown>
 
-        <NavDropdown title={<><FaTruck className="me-2" />Proveedores</>} id="proveedores-dropdown" className="text-white">
-          <NavDropdown.Item as={Link} to="/proveedores/lista">Lista de Proveedores</NavDropdown.Item>
+        {/* REPORTES Dropdown */}
+        <NavDropdown 
+          title={<><FaChartBar className="me-2" />Reportes</>} 
+          id="reportes-dropdown"
+          className={`mb-2 ${location.pathname.includes('/reportes') ? 'active-nav' : ''}`}
+        >
+          <NavDropdown.Item 
+            as={Link} 
+            to="/reportes/ventas"
+            className={isActive('/reportes/ventas') ? 'active-dropdown' : ''}
+          >
+            Reporte de Ventas
+          </NavDropdown.Item>
+          <NavDropdown.Item 
+            as={Link} 
+            to="/reportes/inventario"
+            className={isActive('/reportes/inventario') ? 'active-dropdown' : ''}
+          >
+            Reporte de Inventario
+          </NavDropdown.Item>
         </NavDropdown>
 
-        <hr className="text-white" />
+        <hr className="my-3" />
 
-        <NavDropdown title={<><FaUserCircle className="me-2" />Bienvenido {user.nombre}</>} id="user-dropdown" className="text-white">
+        {/* Usuario */}
+        <NavDropdown 
+          title={<><FaUserCircle className="me-2" />{user.nombre}</>} 
+          id="user-dropdown"
+          className="user-dropdown"
+        >
           <NavDropdown.Item as={Link} to="/perfil">Perfil</NavDropdown.Item>
           <NavDropdown.Item as={Link} to="/logout">Cerrar Sesión</NavDropdown.Item>
         </NavDropdown>
